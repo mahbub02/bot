@@ -22,7 +22,7 @@ class Motor:
                 [0,0,0,1]]
       
       for pin in self.StepPins:
-         print("Setup pins")
+         #print("Setup pins")
          GPIO.setup(pin,GPIO.OUT)
          GPIO.output(pin, False)
       
@@ -36,7 +36,7 @@ class Motor:
       for pin in range(0, 4):
          xpin = self.StepPins[pin]
          if self.Seq[self.StepCounter][pin]!=0:
-            print(" Enable GPIO %i" %(xpin))
+           
             GPIO.output(xpin, True)
          else:
             GPIO.output(xpin, False)
