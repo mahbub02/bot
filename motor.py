@@ -5,6 +5,7 @@ from status import Status
 
 class Motor:
    def __init__(self, name, StepPins, waitTime):
+      GPIO.setwarnings(False)
       GPIO.setmode(GPIO.BCM)
       self.name = name
       self.StepPins = StepPins
@@ -22,7 +23,6 @@ class Motor:
                 [0,0,0,1]]
       
       for pin in self.StepPins:
-         #print("Setup pins")
          GPIO.setup(pin,GPIO.OUT)
          GPIO.output(pin, False)
       
