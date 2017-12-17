@@ -1,41 +1,40 @@
 from curses import wrapper
 from status import Status
 from motor import Motor
-import curses
-from curses import wrapper
+import thread
+import time
 
-def main(stdscr):
-    # Clear screen
-    stdscr.clear()
-    window = curses.initscr()
-    window.nodelay(1)
-    window.keypad(True)
+WaitTime = 1/float(3000)
+leftMotor = Motor("Left", [23,24,25,26], WaitTime)
+rightMotor = Motor("Right", [18,19,20,21], WaitTime)
 
-    WaitTime = 1/float(3000)
-    leftMotor = Motor("Left", [23,24,25,26], WaitTime)
-    rightMotor = Motor("Right", [18,19,20,21], WaitTime)
-    while True:
-        ch = window.getch()
-        stdscr.addstr(0, 0, 'Testing the print option {} here {}'.format(ch, 2000))
-        if ch==curses.KEY_UP: #up
+def takeInput(threadName, extradiarakhlam):
+    while 1:
+        ch = raw_input("L/R/F/B/S ?")
+        if ch=='f': #forward
           leftMotor.StepDir= 1
           rightMotor.StepDir =1
-        if ch==curses.KEY_DOWN: #down
+        if ch=='b': #back
           leftMotor.StepDir= -1
           rightMotor.StepDir = -1
-        if ch==curses.KEY_LEFT: #left
+        if ch=='l': #left
           leftMotor.StepDir= -1
           rightMotor.StepDir = 1
-        if ch==curses.KEY_RIGHT: #right
+        if ch=='r': #right
           leftMotor.StepDir= 1
           rightMotor.StepDir = -1
-        if ch==27:
-          window.endwin()
-          break
-        leftMotor.update()
-        rightMotor.update()
+        if ch=='s':
+          exit()
 
-    stdscr.refresh()
-    stdscr.getkey()
+try:
+    thread.start_new_thread( takeInput, ("Thread-1", 2, ) )
+    #thread.start_new_thread( print_time, ("Thread-2", 4, ) )
+except:
+    print "Error: unable to start thread"
 
-wrapper(main)
+while 1:
+    leftMotor.update()
+    rightMotor.update()
+    pass
+    
+
