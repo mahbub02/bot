@@ -8,30 +8,34 @@ Install Samba
 
 	sudo apt-get install gedit
 
-	sudo leafpad /etc/samba/smb.conf
+	Edit the smb.conf file and add these following lines
 
-
-	Add this into the smb.conf file
-
-	[share]
-		Comment = Pi shared folder
-		Path = /
-		Browseable = yes
-		Writeable = Yes
-		only guest = no
-		create mask = 0777
-		directory mask = 0777
-		Public = yes
-		Guest ok = yes
-
-To install vim
-	sudo apt-get install vim
+		sudo leafpad /etc/samba/smb.conf
+			[share]
+			Comment = Pi shared folder
+			Path = /
+			Browseable = yes
+			Writeable = Yes
+			only guest = no
+			create mask = 0777
+			directory mask = 0777
+			Public = yes
+			Guest ok = yes
 
 bluetooth work
 	sudo apt-get install bluez python-bluez
-	sudo vim /etc/bluetooth/main.conf
-	add this line
-		DisablePlugins = pnat
+	
+	Edit bluetooth/main.conf file 
+		sudo vim /etc/bluetooth/main.conf
+			add this line
+			DisablePlugins = pnat
+	Edit /lib/systemd/system/bluetooth.service
+		add '-C' after 'bluetoothd'. 
+	Load serial port
+		sudo sdptool add SP
+	Reboot the raspberry pi
+		sudo reboot
+		
 	To make your pi bluetooth Discoverable
 		sudo hciconfig hci0 piscan
 	[change your device name to something else you fancy]
