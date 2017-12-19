@@ -19,16 +19,16 @@ rightMotor = Motor("Right", [18,19,20,21], WaitTime)
 
 def motorResponse(ch):
     print "motor response to [%s]" % ch
-    if ch=='f': #forward
+    if ch=='r': #forward
       leftMotor.StepDir= 1
       rightMotor.StepDir =1
-    if ch=='b': #back
+    if ch=='l': #back
       leftMotor.StepDir= -1
       rightMotor.StepDir = -1
-    if ch=='l': #left
+    if ch=='b': #left
       leftMotor.StepDir= -1
       rightMotor.StepDir = 1
-    if ch=='r': #right
+    if ch=='f': #right
       leftMotor.StepDir= 1
       rightMotor.StepDir = -1
     if ch=='s':
@@ -49,27 +49,38 @@ def bluetoothInput(threadName, extradiarakhlam):
                        profiles = [ SERIAL_PORT_PROFILE ], 
     #                   protocols = [ OBEX_UUID ] 
                         )
-    client_sock, client_info = server_sock.accept()
-    while True:          
-        print "Waiting for connection on RFCOMM channel %d" % port
+
+    client_sock =None
+    client_info = None
+    while True:
+        if client_sock is None:
+            client_sock, client_info = server_sock.accept()          
+        #print "Waiting for connection on RFCOMM channel %d" % port
         print "Accepted connection from ", client_info
         try:
-            data = client_sock.recv(1024)
-            if len(data) == 0: break
-            print "received [%s]" % data
-            motorResponse(data)
+            if client_sock is not None:
+                data = client_sock.recv(1024)
+                if len(data) == 0: break
+                print "received [%s]" % data
+                motorResponse(data)
             #client_sock.send(data)
         except IOError:
+            print "io error disconnected"
+            client_sock.close()
+            client_sock= None
+
             pass
         except KeyboardInterrupt:
 
-            print "disconnected"
-
+            
             client_sock.close()
             server_sock.close()
             print "all done"
 
             break
+        except :
+            print "disconnected"
+
 
 
 
