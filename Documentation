@@ -1,1 +1,64 @@
+Circuit:
+-ULN2003APG(stepper motor driver)
+-pin dirrection out 1(blue) to 4(red) connect with the stepper motor
+-ULN 2003( Left Motor): 
+    -IN 1-> GPI 26  
+    -IN 2-> GPI 25  
+    -IN 3-> GPI 24  
+    -IN 4-> GPI 23
+-ULN 2003 (Right Motor)
+    -IN 1-> GPI 21  
+    -IN 2-> GPI 20  
+    -IN 3-> GPI 19  
+    -IN 4-> GPI 18
+
+Environment:
+  Raspbian 9.1 (linux distribution version)
+  
+
+Environment setup: 
+  Update the list of available packages in the environment
+    $sudo apt-get update 
+	Installs the newer versions of the packages we already have installed
+    $sudo apt-get upgrade
+  Bluetooth library Install ( Not verified)
+    sudo apt-get install bluez python-bluez
+  Edit /etc/bluetooth/main.conf file and the following line in the bottom (Not verified, not required)
+    DisablePlugins = pnat
+  Edit /lib/systemd/system/bluetooth.service
+      add '-C' after the word 'bluetoothd' and result will look like "bluetoothd -C" 
+   Load serial port
+      $sudo sdptool add SP
+   Reboot the raspberry pi
+      sudo reboot
+   Command to run after each reboot
+      To make your pi bluetooth Discoverable
+        $sudo hciconfig hci0 piscan
+      change your device name to 'Device Name' $Todo. Change this to panion
+        $sudo hciconfig hci0 name 'Device Name' 
+  
+Text editor and file access
+    Samba:
+      $sudo apt-get install samba samba-common-bin
+    Text Editor
+      $sudo apt-get install gedit
+    Edit the /etc/samba/smb.conf file and add these following lines
+      [share]
+      Comment = Pi shared folder
+      Path = /
+      Browseable = yes
+      Writeable = Yes
+      only guest = no
+      create mask = 0777
+      directory mask = 0777
+      Public = yes
+      Guest ok = yes
+
+Helpful resources:
+    https://www.youtube.com/watch?v=DmtJBc229Rg
+  
+  
+
+
+
 
